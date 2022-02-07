@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kasappdeployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kasapp
+  template:
+    metadata:
+      labels:
+        app: kasapp
+    spec:
+      containers:
+      - name: kasapp
+        image: acrkas.azurecr.io/myapp:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+apiVersion: v1
+kind: Service
+metadata:
+  name: kasappsvc
+spec:
+  selector:
+    app: kasapp
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+  type: LoadBalancer
+
